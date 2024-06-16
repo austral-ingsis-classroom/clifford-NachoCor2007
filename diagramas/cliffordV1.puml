@@ -2,19 +2,11 @@
 
 class FileManager {
   - cursor: FileSystem
-  - parser: Parser
   - commandFactory: CommandFactory
-  + run(command: String): Result<FileManager>
   + getCursor(): FileSystem
+  + run(command: String): Result<FileManager>
   - getCommand(command: String): Command
-  - parseParams(params: String): List<String>
 }
-
-class Parser {
-  + parseParams(params: String): List<String>
-}
-
-FileManager -> Parser
 
 interface FileSystem {
   + getName(): String
@@ -47,10 +39,18 @@ CompositeFileSystem <|.. Directory
 FileSystem <--o Directory
 
 class CommandFactory {
+  - parser: Parser
   + getCommand(command: String): Command
+  - parseCommand(params: String): List<String>
 }
 
 FileManager --> CommandFactory
+
+class Parser {
+  + parseCommand(params: String): List<String>
+}
+
+Parser <- CommandFactory
 
 interface Command {
   + execute(fileManager: FileManager, params: List<String>): Result<FileManager>
