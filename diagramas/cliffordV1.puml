@@ -88,4 +88,14 @@ Command <|.. MkdirCommand
 Command <|.. RmCommand
 Command <|.. PwdCommand
 
+class Result<E> {
+  + communication element
+  - resultType: ResultType
+  - value: E
+  - message: String
+  + getResultType(): String
+  + getValue(): E
+  + getMessage(): String
+}
+
 @enduml
