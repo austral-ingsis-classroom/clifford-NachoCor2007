@@ -53,33 +53,40 @@ class Parser {
 Parser <- CommandFactory
 
 interface Command {
-  + execute(fileManager: FileManager, params: List<String>): Result<FileManager>
+  + execute(): Result<FileManager>
 }
 
 CommandFactory --> Command
 
 class LsCommand {
-  - ord: String
+  - fileManager: FileManager
+  - options: Map<String, String>
 }
 
 class CdCommand {
-  - path: String
+  - fileManager: FileManager
+  - options: Map<String, String>
 }
 
 class TouchCommand {
-  - name: String
+  - fileManager: FileManager
+  - options: Map<String, String>
 }
 
 class MkdirCommand {
-  - name: String
+  - fileManager: FileManager
+  - options: Map<String, String>
 }
 
 class RmCommand {
-  - name: String
-  - recursive: boolean
+  - fileManager: FileManager
+  - options: Map<String, String>
 }
 
-class PwdCommand {}
+class PwdCommand {
+  - fileManager: FileManager
+  - options: Map<String, String>
+}
 
 Command <|.. LsCommand
 Command <|.. CdCommand
