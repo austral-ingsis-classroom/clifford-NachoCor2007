@@ -1,5 +1,7 @@
 package edu.austral.ingsis.clifford.command;
 
+import edu.austral.ingsis.clifford.communication.Result;
+
 import java.util.List;
 
 public class CommandFactory {
@@ -9,7 +11,7 @@ public class CommandFactory {
     this.parser = parser;
   }
 
-  public Command getCommand(String command) {
+  public Result<Command> getCommand(String command) {
     return null;
   }
 
