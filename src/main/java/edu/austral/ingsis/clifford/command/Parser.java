@@ -4,6 +4,6 @@ import java.util.List;
 
 public class Parser {
   public List<String> parseCommand(String command) {
-    return null;
+    return List.of(command.split(" "));
   }
 }
