@@ -1,0 +1,91 @@
+@startuml
+
+class FileManager {
+  - cursor: FileSystem
+  - parser: Parser
+  - commandFactory: CommandFactory
+  + run(command: String): Result<FileManager>
+  + getCursor(): FileSystem
+  - getCommand(command: String): Command
+  - parseParams(params: String): List<String>
+}
+
+class Parser {
+  + parseParams(params: String): List<String>
+}
+
+FileManager -> Parser
+
+interface FileSystem {
+  + getName(): String
+  + isDirectory(): boolean
+  + copy(): FileSystem
+}
+
+FileManager --> FileSystem
+
+class File {
+  - name: String
+}
+
+FileSystem <|... File
+
+interface CompositeFileSystem {
+  + add(fileSystem: FileSystem): Result<FileSystem>
+  + remove(fileSystem: FileSystem): Result<FileSystem>
+  + getChildren(): List<FileSystem>
+}
+
+FileSystem <|.. CompositeFileSystem
+
+class Directory {
+  - name: String
+  - files: List<FileSystem>
+}
+
+CompositeFileSystem <|.. Directory
+FileSystem <--o Directory
+
+class CommandFactory {
+  + getCommand(command: String): Command
+}
+
+FileManager --> CommandFactory
+
+interface Command {
+  + execute(fileManager: FileManager, params: List<String>): Result<FileManager>
+}
+
+CommandFactory --> Command
+
+class LsCommand {
+  - ord: String
+}
+
+class CdCommand {
+  - path: String
+}
+
+class TouchCommand {
+  - name: String
+}
+
+class MkdirCommand {
+  - name: String
+}
+
+class RmCommand {
+  - name: String
+  - recursive: boolean
+}
+
+class PwdCommand {}
+
+Command <|.. LsCommand
+Command <|.. CdCommand
+Command <|.. TouchCommand
+Command <|.. MkdirCommand
+Command <|.. RmCommand
+Command <|.. PwdCommand
+
+@enduml
