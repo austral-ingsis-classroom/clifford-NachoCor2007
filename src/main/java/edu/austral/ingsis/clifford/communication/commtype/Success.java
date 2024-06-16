@@ -1,4 +1,4 @@
-package edu.austral.ingsis.clifford.communication;
+package edu.austral.ingsis.clifford.communication.commtype;
 
 public final class Success implements ResultType {
   @Override
