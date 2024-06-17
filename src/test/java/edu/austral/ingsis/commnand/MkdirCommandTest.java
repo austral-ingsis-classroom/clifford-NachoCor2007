@@ -61,6 +61,6 @@ public class MkdirCommandTest {
     Result<FileManager> runResult = afterMkdirCommand.run("mkdir horace");
 
     assertEquals(runResult.resultType().getResultType(), "Failure");
-    assertEquals(runResult.message(), "Directory already exists");
+    assertEquals(runResult.message(), "horace directory already exists");
   }
 }

@@ -64,7 +64,7 @@ public class MkdirCommand implements Command {
     boolean alreadyExists = dirAlreadyExists(currentDirectory, name);
 
     if (alreadyExists) {
-      return new Result<>(new Failure(), null, "Directory already exists");
+      return new Result<>(new Failure(), null, name + " directory already exists");
     }
 
     return currentDirectory.add(newDirectory);
