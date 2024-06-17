@@ -1,8 +1,13 @@
 package edu.austral.ingsis.clifford.command;
 
+import edu.austral.ingsis.clifford.command.concretecommands.MkdirCommand;
 import edu.austral.ingsis.clifford.communication.Result;
-
+import edu.austral.ingsis.clifford.communication.commtype.Failure;
+import edu.austral.ingsis.clifford.communication.commtype.Success;
+import edu.austral.ingsis.clifford.filemanager.FileManager;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CommandFactory {
   private final Parser parser;
@@ -11,11 +16,39 @@ public class CommandFactory {
     this.parser = parser;
   }
 
-  public Result<Command> getCommand(String command) {
-    return null;
+  public Result<Command> getCommand(FileManager fileManager, String command) {
+    List<String> parsedCommand = parseCommand(command);
+
+    if (noCommandProvided(parsedCommand)) {
+      return new Result<>(new Failure(), null, "No command provided");
+    }
+
+    return createCommand(fileManager, parsedCommand);
+  }
+
+  private boolean noCommandProvided(List<String> parsedCommand) {
+    return parsedCommand.size() == 1 && parsedCommand.getFirst().isEmpty();
   }
 
   private List<String> parseCommand(String command) {
     return parser.parseCommand(command);
+  }
+
+  private Result<Command> createCommand(FileManager fileManager, List<String> params) {
+    String commandName = params.removeFirst();
+
+    switch (commandName) {
+      case "mkdir":
+        return createMkdirCommand(fileManager, params);
+      default:
+        return new Result<>(new Failure(), null, "Command not found");
+    }
+  }
+
+  private Result<Command> createMkdirCommand(FileManager fileManager, List<String> params) {
+    Map<String, String> options = new HashMap<>();
+    options.put("name", params.removeFirst());
+
+    return new Result<>(new Success(), new MkdirCommand(fileManager, options), "Mkdir command created");
   }
 }
