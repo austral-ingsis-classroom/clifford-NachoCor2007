@@ -2,6 +2,7 @@ package edu.austral.ingsis.clifford.command;
 
 import edu.austral.ingsis.clifford.command.concretecommands.LsCommand;
 import edu.austral.ingsis.clifford.command.concretecommands.MkdirCommand;
+import edu.austral.ingsis.clifford.command.concretecommands.TouchCommand;
 import edu.austral.ingsis.clifford.communication.Result;
 import edu.austral.ingsis.clifford.communication.commtype.Failure;
 import edu.austral.ingsis.clifford.communication.commtype.Success;
@@ -40,6 +41,7 @@ public class CommandFactory {
       String commandName = params.removeFirst();
       return switch (commandName) {
         case "mkdir" -> createMkdirCommand(fileManager, params);
+        case "touch" -> createTouchCommand(fileManager, params);
         case "ls" -> createLsCommand(fileManager, params);
         default -> new Result<>(new Failure(), null, "Command not found");
       };
@@ -59,6 +61,22 @@ public class CommandFactory {
       }
 
       return new Result<>(new Success(), new MkdirCommand(fileManager, options), "Mkdir command created");
+    } catch (Exception e) {
+      return new Result<>(new Failure(), null, "Something went wrong while parsing the command");
+    }
+  }
+
+  private Result<Command> createTouchCommand(FileManager fileManager, List<String> params) {
+    Map<String, String> options = new HashMap<>();
+
+    try {
+      options.put("name", params.removeFirst());
+
+      if (!params.isEmpty()) {
+        return new Result<>(new Failure(), null, "Invalid command");
+      }
+
+      return new Result<>(new Success(), new TouchCommand(fileManager, options), "Touch command created");
     } catch (Exception e) {
       return new Result<>(new Failure(), null, "Something went wrong while parsing the command");
     }
