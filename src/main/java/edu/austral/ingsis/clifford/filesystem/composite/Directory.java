@@ -12,7 +12,7 @@ public record Directory(String name, List<FileSystem> children, FileSystem paren
   public Result<FileSystem> add(FileSystem toAdd) {
     List<FileSystem> newChildren = copyChildren();
     newChildren.add(toAdd);
-    return new Result<>(new Success(), new Directory(name(), newChildren, parent().copy()), toAdd.name() + " directory created");
+    return new Result<>(new Success(), createNewDirectory(newChildren), toAdd.name() + " directory created");
   }
 
   @Override
@@ -21,10 +21,17 @@ public record Directory(String name, List<FileSystem> children, FileSystem paren
 
     try {
       newChildren.remove(toRemove);
-      return new Result<>(new Success(), new Directory(name(), newChildren, parent()), toRemove.name() + " removed");
+      return new Result<>(new Success(), createNewDirectory(newChildren), toRemove.name() + " removed");
     } catch (Exception e) {
       return new Result<>(new Failure(), copy(), toRemove.name() + " not found");
     }
+  }
+
+  private Directory createNewDirectory(List<FileSystem> newChildren) {
+    if (name().equals("/")) {
+      return new Directory("/", newChildren, null);
+    }
+    return new Directory(name(), newChildren, parent());
   }
 
   @Override
@@ -58,6 +65,6 @@ public record Directory(String name, List<FileSystem> children, FileSystem paren
   }
 
   private CompositeFileSystem copyDirectory() {
-    return new Directory(name(), children(), parent());
+    return createNewDirectory(children());
   }
 }
