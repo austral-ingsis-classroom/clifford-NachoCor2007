@@ -5,4 +5,7 @@ import edu.austral.ingsis.clifford.communication.commtype.ResultType;
 public record Result<E>(ResultType resultType,
                         E value,
                         String message) {
+  public boolean isEmpty() {
+    return value == null;
+  }
 }
