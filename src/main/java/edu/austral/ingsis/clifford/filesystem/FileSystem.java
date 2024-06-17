@@ -8,4 +8,5 @@ public interface FileSystem {
   boolean isDirectory();
   Result<CompositeFileSystem> getDirectory();
   FileSystem copy();
+  FileSystem parent();
 }

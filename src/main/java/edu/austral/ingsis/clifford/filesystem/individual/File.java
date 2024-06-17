@@ -5,7 +5,7 @@ import edu.austral.ingsis.clifford.communication.commtype.Failure;
 import edu.austral.ingsis.clifford.filesystem.FileSystem;
 import edu.austral.ingsis.clifford.filesystem.composite.CompositeFileSystem;
 
-public record File(String name) implements FileSystem {
+public record File(String name, FileSystem parent) implements FileSystem {
   @Override
   public boolean isDirectory() {
     return false;
@@ -18,6 +18,6 @@ public record File(String name) implements FileSystem {
 
   @Override
   public FileSystem copy() {
-    return new File(name());
+    return new File(name(), parent().copy());
   }
 }

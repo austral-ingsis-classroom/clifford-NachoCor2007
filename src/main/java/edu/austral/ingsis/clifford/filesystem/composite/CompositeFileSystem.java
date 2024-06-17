@@ -5,7 +5,7 @@ import edu.austral.ingsis.clifford.filesystem.FileSystem;
 import java.util.List;
 
 public interface CompositeFileSystem extends FileSystem {
-  Result<CompositeFileSystem> add(FileSystem toAdd);
-  Result<CompositeFileSystem> remove(FileSystem toRemove);
+  Result<FileSystem> add(FileSystem toAdd);
+  Result<FileSystem> remove(FileSystem toRemove);
   List<FileSystem> children();
 }
