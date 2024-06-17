@@ -1,5 +1,6 @@
 package edu.austral.ingsis.clifford.command;
 
+import edu.austral.ingsis.clifford.command.concretecommands.LsCommand;
 import edu.austral.ingsis.clifford.command.concretecommands.MkdirCommand;
 import edu.austral.ingsis.clifford.communication.Result;
 import edu.austral.ingsis.clifford.communication.commtype.Failure;
@@ -37,12 +38,11 @@ public class CommandFactory {
   private Result<Command> createCommand(FileManager fileManager, List<String> params) {
     try {
       String commandName = params.removeFirst();
-      switch (commandName) {
-        case "mkdir":
-          return createMkdirCommand(fileManager, params);
-        default:
-          return new Result<>(new Failure(), null, "Command not found");
-      }
+      return switch (commandName) {
+        case "mkdir" -> createMkdirCommand(fileManager, params);
+        case "ls" -> createLsCommand(fileManager, params);
+        default -> new Result<>(new Failure(), null, "Command not found");
+      };
     } catch (Exception e) {
       return new Result<>(new Failure(), null, "Something went wrong while parsing the command");
     }
@@ -59,6 +59,16 @@ public class CommandFactory {
       }
 
       return new Result<>(new Success(), new MkdirCommand(fileManager, options), "Mkdir command created");
+    } catch (Exception e) {
+      return new Result<>(new Failure(), null, "Something went wrong while parsing the command");
+    }
+  }
+
+  private Result<Command> createLsCommand(FileManager fileManager, List<String> params) {
+    Map<String, String> options = new HashMap<>();
+
+    try {
+      return new Result<>(new Success(), new LsCommand(fileManager, options), "Ls command created");
     } catch (Exception e) {
       return new Result<>(new Failure(), null, "Something went wrong while parsing the command");
     }
