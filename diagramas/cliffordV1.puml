@@ -1,16 +1,30 @@
 @startuml
 
+interface ResultType {
+  + getResultType(): String
+}
+
+ResultType <- Result
+
+class Success {}
+
+class Failure {}
+
+ResultType <|.. Success
+ResultType <|.. Failure
+
 class FileManager {
   - cursor: FileSystem
   - commandFactory: CommandFactory
   + getCursor(): FileSystem
   + run(command: String): Result<FileManager>
-  - getCommand(command: String): Command
+  - getCommand(command: String): Result<Command>
 }
 
 interface FileSystem {
   + getName(): String
   + isDirectory(): boolean
+  + getDirectory(): Result<CompositeFileSystem>
   + copy(): FileSystem
 }
 
@@ -23,8 +37,8 @@ class File {
 FileSystem <|... File
 
 interface CompositeFileSystem {
-  + add(fileSystem: FileSystem): Result<FileSystem>
-  + remove(fileSystem: FileSystem): Result<FileSystem>
+  + add(toAdd: FileSystem): Result<FileSystem>
+  + remove(toRemove: FileSystem): Result<FileSystem>
   + getChildren(): List<FileSystem>
 }
 
@@ -40,7 +54,7 @@ FileSystem <--o Directory
 
 class CommandFactory {
   - parser: Parser
-  + getCommand(command: String): Command
+  + getCommand(command: String): Result<Command>
   - parseCommand(params: String): List<String>
 }
 
