@@ -8,7 +8,6 @@ import edu.austral.ingsis.clifford.filemanager.FileManager;
 import edu.austral.ingsis.clifford.filesystem.FileSystem;
 import edu.austral.ingsis.clifford.filesystem.composite.CompositeFileSystem;
 import edu.austral.ingsis.clifford.filesystem.composite.Directory;
-import edu.austral.ingsis.clifford.filesystem.individual.File;
 
 import java.util.Map;
 
@@ -41,12 +40,23 @@ public class MkdirCommand implements Command {
   private Result<FileManager> createAndAddDirectory(CompositeFileSystem currentDirectory, String name) {
     boolean validName = validateDirName(name);
     if (validName) {
-      Directory newDirectory = new Directory(name, currentDirectory.children(), currentDirectory);
-      currentDirectory.add(newDirectory);
-      return new Result<>(new Success(), fileManager.copy(), name + " directory created");
+      return getFileManagerResult(currentDirectory, name);
     } else {
       return new Result<>(new Failure(), fileManager.copy(), "Invalid directory name");
     }
+  }
+
+  private Result<FileManager> getFileManagerResult(CompositeFileSystem currentDirectory, String name) {
+    CompositeFileSystem newDirectory = new Directory(name, currentDirectory.children(), currentDirectory);
+    Result<FileSystem> filledNewDirectory = currentDirectory.add(newDirectory);
+
+    if (filledNewDirectory.resultType().getResultType().equals("Failure")) {
+      return new Result<>(new Failure(), fileManager.copy(), filledNewDirectory.message());
+    }
+
+    FileManager newFileManager = new FileManager(filledNewDirectory.value(), fileManager.commandFactory());
+
+    return new Result<>(new Success(), newFileManager, name + " directory created");
   }
 
   private boolean validateDirName(String name) {
