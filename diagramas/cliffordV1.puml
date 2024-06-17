@@ -19,6 +19,7 @@ class FileManager {
   + getCursor(): FileSystem
   + run(command: String): Result<FileManager>
   - getCommand(command: String): Result<Command>
+  + copy(): FileManager
 }
 
 interface FileSystem {
