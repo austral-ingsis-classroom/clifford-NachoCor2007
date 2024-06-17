@@ -47,8 +47,7 @@ public class MkdirCommand implements Command {
   }
 
   private Result<FileManager> getFileManagerResult(CompositeFileSystem currentDirectory, String name) {
-    CompositeFileSystem newDirectory = new Directory(name, currentDirectory.children(), currentDirectory);
-    Result<FileSystem> filledNewDirectory = currentDirectory.add(newDirectory);
+    Result<FileSystem> filledNewDirectory = getFileSystemResult(currentDirectory, name);
 
     if (filledNewDirectory.resultType().getResultType().equals("Failure")) {
       return new Result<>(new Failure(), fileManager.copy(), filledNewDirectory.message());
@@ -57,6 +56,24 @@ public class MkdirCommand implements Command {
     FileManager newFileManager = new FileManager(filledNewDirectory.value(), fileManager.commandFactory());
 
     return new Result<>(new Success(), newFileManager, name + " directory created");
+  }
+
+  private Result<FileSystem> getFileSystemResult(CompositeFileSystem currentDirectory, String name) {
+    CompositeFileSystem newDirectory = new Directory(name, currentDirectory.children(), currentDirectory);
+
+    boolean alreadyExists = dirAlreadyExists(currentDirectory, name);
+
+    if (alreadyExists) {
+      return new Result<>(new Failure(), null, "Directory already exists");
+    }
+
+    return currentDirectory.add(newDirectory);
+  }
+
+  private boolean dirAlreadyExists(CompositeFileSystem currentDirectory, String name) {
+    return currentDirectory.children()
+        .stream()
+        .anyMatch(fileSystem -> fileSystem.name().equals(name) && fileSystem.isDirectory());
   }
 
   private boolean validateDirName(String name) {

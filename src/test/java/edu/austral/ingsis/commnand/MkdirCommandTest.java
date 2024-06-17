@@ -54,4 +54,13 @@ public class MkdirCommandTest {
     assertEquals(runResult.message(), "Invalid command");
     assertEquals(children.size(), 0);
   }
+
+  @Test
+  public void existingDirMkdirCommandTest() {
+    FileManager afterMkdirCommand = fileManager.run("mkdir horace").value();
+    Result<FileManager> runResult = afterMkdirCommand.run("mkdir horace");
+
+    assertEquals(runResult.resultType().getResultType(), "Failure");
+    assertEquals(runResult.message(), "Directory already exists");
+  }
 }
