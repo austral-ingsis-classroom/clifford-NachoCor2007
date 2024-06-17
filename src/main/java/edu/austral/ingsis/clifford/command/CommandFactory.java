@@ -35,20 +35,27 @@ public class CommandFactory {
   }
 
   private Result<Command> createCommand(FileManager fileManager, List<String> params) {
-    String commandName = params.removeFirst();
-
-    switch (commandName) {
-      case "mkdir":
-        return createMkdirCommand(fileManager, params);
-      default:
-        return new Result<>(new Failure(), null, "Command not found");
+    try {
+      String commandName = params.removeFirst();
+      switch (commandName) {
+        case "mkdir":
+          return createMkdirCommand(fileManager, params);
+        default:
+          return new Result<>(new Failure(), null, "Command not found");
+      }
+    } catch (Exception e) {
+      return new Result<>(new Failure(), null, "Something went wrong while parsing the command");
     }
   }
 
   private Result<Command> createMkdirCommand(FileManager fileManager, List<String> params) {
     Map<String, String> options = new HashMap<>();
-    options.put("name", params.removeFirst());
 
-    return new Result<>(new Success(), new MkdirCommand(fileManager, options), "Mkdir command created");
+    try {
+      options.put("name", params.removeFirst());
+      return new Result<>(new Success(), new MkdirCommand(fileManager, options), "Mkdir command created");
+    } catch (Exception e) {
+      return new Result<>(new Failure(), null, "Something went wrong while parsing the command");
+    }
   }
 }
