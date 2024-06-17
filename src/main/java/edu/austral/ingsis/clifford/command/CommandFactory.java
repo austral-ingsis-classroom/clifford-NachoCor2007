@@ -53,6 +53,11 @@ public class CommandFactory {
 
     try {
       options.put("name", params.removeFirst());
+
+      if (!params.isEmpty()) {
+        return new Result<>(new Failure(), null, "Invalid command");
+      }
+
       return new Result<>(new Success(), new MkdirCommand(fileManager, options), "Mkdir command created");
     } catch (Exception e) {
       return new Result<>(new Failure(), null, "Something went wrong while parsing the command");
