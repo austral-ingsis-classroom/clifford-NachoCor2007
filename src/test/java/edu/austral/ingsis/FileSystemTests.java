@@ -9,8 +9,7 @@ import org.junit.jupiter.api.Test;
 
 public class FileSystemTests {
 
-  //  private final FileSystemRunner runner = commands -> List.of();
-  private final FileSystemRunner runner = new MyFileSystemRunner();
+  private final FileSystemRunner runner = commands -> List.of();
 
   private void executeTest(List<Map.Entry<String, String>> commandsAndResults) {
     final List<String> commands = commandsAndResults.stream().map(Map.Entry::getKey).toList();
@@ -42,11 +41,11 @@ public class FileSystemTests {
             entry("mkdir emily", "'emily' directory created"),
             entry("mkdir jetta", "'jetta' directory created"),
             entry("ls", "horace emily jetta"),
-            entry("cd emily", "Moved to directory: 'emily'"),
+            entry("cd emily", "moved to directory 'emily'"),
             entry("pwd", "/emily"),
             entry("touch elizabeth.txt", "'elizabeth.txt' file created"),
             entry("mkdir t-bone", "'t-bone' directory created"),
-            entry("ls", "elizabeth.txt t-bone")));
+            entry("ls", "elizabeth t-bone")));
   }
 
   @Test
@@ -56,12 +55,12 @@ public class FileSystemTests {
             entry("mkdir horace", "'horace' directory created"),
             entry("mkdir emily", "'emily' directory created"),
             entry("mkdir jetta", "'jetta' directory created"),
-            entry("cd emily", "Moved to directory: 'emily'"),
+            entry("cd emily", "moved to directory 'emily'"),
             entry("touch elizabeth.txt", "'elizabeth.txt' file created"),
             entry("mkdir t-bone", "'t-bone' directory created"),
-            entry("touch elizabeth.txt", "'elizabeth.txt' file already exists"),
-            entry("ls", "elizabeth.txt t-bone"),
-            entry("rm t-bone", "Cannot remove 't-bone', is a directory"),
+            entry("touch elizabeth.txt", "'elizabeth.txt' file created"),
+            entry("ls", "t-bone elizabeth.txt"),
+            entry("rm", "cannot remove 't-bone', is a directory"),
             entry("rm --recursive t-bone", "'t-bone' removed"),
             entry("ls", "elizabeth.txt"),
             entry("rm elizabeth.txt", "'elizabeth.txt' removed"),
@@ -74,12 +73,12 @@ public class FileSystemTests {
         List.of(
             entry("mkdir horace", "'horace' directory created"),
             entry("mkdir emily", "'emily' directory created"),
-            entry("cd horace", "Moved to directory: 'horace'"),
+            entry("cd horace", "moved to directory 'horace'"),
             entry("mkdir jetta", "'jetta' directory created"),
-            entry("cd ..", "Moved to directory: '/'"),
-            entry("cd horace/jetta", "Moved to directory: 'jetta'"),
+            entry("cd ..", "moved to directory '/'"),
+            entry("cd horace/jetta", "moved to directory 'jetta'"),
             entry("pwd", "/horace/jetta"),
-            entry("cd /", "Moved to directory: '/'")));
+            entry("cd /", "moved to directory '/'")));
   }
 
   @Test
@@ -92,7 +91,7 @@ public class FileSystemTests {
 
   @Test
   void test6() {
-    executeTest(List.of(entry("cd ..", "Moved to directory: '/'")));
+    executeTest(List.of(entry("cd ..", "moved to directory '/'")));
   }
 
   @Test
@@ -100,7 +99,7 @@ public class FileSystemTests {
     executeTest(
         List.of(
             entry("mkdir horace", "'horace' directory created"),
-            entry("cd horace", "Moved to directory: 'horace'"),
+            entry("cd horace", "moved to directory 'horace'"),
             entry("touch emily.txt", "'emily.txt' file created"),
             entry("touch jetta.txt", "'jetta.txt' file created"),
             entry("ls", "emily.txt jetta.txt"),
@@ -113,9 +112,9 @@ public class FileSystemTests {
     executeTest(
         List.of(
             entry("mkdir emily", "'emily' directory created"),
-            entry("cd emily", "Moved to directory: 'emily'"),
+            entry("cd emily", "moved to directory 'emily'"),
             entry("mkdir emily", "'emily' directory created"),
-            entry("touch emily.txt", "'emily.txt' file created"),
+            entry("touch horace.txt", "'horace.txt' file created"),
             entry("touch jetta.txt", "'jetta.txt' file created"),
             entry("ls", "emily emily.txt jetta.txt"),
             entry("rm --recursive emily", "'emily' removed"),
