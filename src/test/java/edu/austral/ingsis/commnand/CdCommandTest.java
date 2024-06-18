@@ -24,6 +24,19 @@ public class CdCommandTest {
   }
 
   @Test
+  public void testCdCommandRoot() {
+    FileManager fileManager1 = fileManager.run("mkdir test").value();
+    FileManager fileManager2 = fileManager1.run("cd test").value();
+    FileManager fileManager3 = fileManager2.run("mkdir test2").value();
+    FileManager fileManager4 = fileManager3.run("cd test2").value();
+    Result<FileManager> result = fileManager4.run("cd /");
+
+    assertEquals(result.message(), "Moved to directory: /");
+    assertEquals(result.resultType().getResultType(), "Success");
+    assertEquals(result.value().cursor().name(), "/");
+  }
+
+  @Test
   public void testCdCommandSeveralDirs() {
     FileManager fileManager1 = fileManager.run("mkdir test").value();
     FileManager fileManager2 = fileManager1.run("cd test").value();

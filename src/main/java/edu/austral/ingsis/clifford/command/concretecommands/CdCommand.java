@@ -39,6 +39,10 @@ public class CdCommand implements Command {
       return new Result<>(new Success(), cursor, "No path provided");
     }
 
+    if (path.size() == 1 && path.getFirst().equals("/")) {
+      return returnToRoot(cursor);
+    }
+
     return iterateThroughPath(cursor, path);
   }
 
@@ -49,7 +53,21 @@ public class CdCommand implements Command {
       return new ArrayList<>();
     }
 
+    if (path.equals("/")) {
+      return new ArrayList<>(List.of("/"));
+    }
+
     return new ArrayList<>(List.of(path.split("/")));
+  }
+
+  private Result<FileSystem> returnToRoot(FileSystem cursor) {
+    FileSystem temp = cursor;
+
+    while (temp.parent() != null) {
+      temp = temp.parent();
+    }
+
+    return new Result<>(new Success(), temp, "Moved to directory: /");
   }
 
   private Result<FileSystem> iterateThroughPath(FileSystem cursor, List<String> path) {
@@ -80,7 +98,7 @@ public class CdCommand implements Command {
       }
 
       if (!child.name().equals(nextDir)) {
-        return new Result<>(new Failure(), cursor, "Directory not found");
+        return new Result<>(new Failure(), cursor, nextDir + " directory not found");
       }
 
       temp = child;
