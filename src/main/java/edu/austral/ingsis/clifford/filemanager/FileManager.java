@@ -6,16 +6,17 @@ import edu.austral.ingsis.clifford.communication.Result;
 import edu.austral.ingsis.clifford.filesystem.FileSystem;
 import edu.austral.ingsis.clifford.filesystem.composite.Directory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public record FileManager(FileSystem cursor, CommandFactory commandFactory) {
   public FileManager(CommandFactory commandFactory) {
-    this(new Directory("/", List.of(), null), commandFactory);
+    this(new Directory("/", new ArrayList<>(), null), commandFactory);
   }
 
   @Override
   public FileSystem cursor() {
-    return cursor.copy();
+    return cursor;
   }
 
   public Result<FileManager> run(String command) {

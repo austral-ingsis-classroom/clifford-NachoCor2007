@@ -7,36 +7,41 @@ import edu.austral.ingsis.clifford.filesystem.FileSystem;
 import java.util.ArrayList;
 import java.util.List;
 
-public record Directory(String name, List<FileSystem> children, FileSystem parent) implements CompositeFileSystem {
-  @Override
-  public Result<FileSystem> add(FileSystem toAdd) {
-    List<FileSystem> newChildren = copyChildren();
-    newChildren.add(toAdd);
-    return new Result<>(new Success(), createNewDirectory(newChildren), toAdd.name() + " directory created");
+public class Directory implements CompositeFileSystem {
+  private final String name;
+  private List<FileSystem> children;
+  private FileSystem parent;
+
+  public Directory(String name, List<FileSystem> children, FileSystem parent) {
+    this.name = name;
+    this.children = children;
+    this.parent = parent;
   }
 
   @Override
-  public Result<FileSystem> remove(FileSystem toRemove) {
-    List<FileSystem> newChildren = copyChildren();
-
-    try {
-      newChildren.remove(toRemove);
-      return new Result<>(new Success(), createNewDirectory(newChildren), toRemove.name() + " removed");
-    } catch (Exception e) {
-      return new Result<>(new Failure(), copy(), toRemove.name() + " not found");
-    }
-  }
-
-  private Directory createNewDirectory(List<FileSystem> newChildren) {
-    if (name().equals("/")) {
-      return new Directory("/", newChildren, null);
-    }
-    return new Directory(name(), newChildren, parent());
+  public String name() {
+    return name;
   }
 
   @Override
   public List<FileSystem> children() {
-    return copyChildren();
+    return children;
+  }
+
+  @Override
+  public FileSystem parent() {
+    return parent;
+  }
+
+  @Override
+  public Result<FileSystem> add(FileSystem toAdd) {
+    children.add(toAdd);
+    return new Result<>(new Success(), this, toAdd.name() + " directory created");
+  }
+
+  @Override
+  public Result<FileSystem> remove(FileSystem toRemove) {
+    return null;
   }
 
   @Override
@@ -47,17 +52,7 @@ public record Directory(String name, List<FileSystem> children, FileSystem paren
       }
     }
 
-    return new Result<>(new Failure(), copy(), name + " not found");
-  }
-
-  private List<FileSystem> copyChildren() {
-    List<FileSystem> copiedChildren = new ArrayList<>();
-
-    for (FileSystem child : children) {
-      copiedChildren.add(child.copy());
-    }
-
-    return copiedChildren;
+    return new Result<>(new Failure(), null, name + " not found");
   }
 
   @Override
@@ -67,15 +62,11 @@ public record Directory(String name, List<FileSystem> children, FileSystem paren
 
   @Override
   public Result<CompositeFileSystem> getDirectory() {
-    return new Result<>(new Success(), copyDirectory(), "Directory");
+    return new Result<>(new Success(), this, "Directory");
   }
 
   @Override
   public FileSystem copy() {
-    return copyDirectory();
-  }
-
-  private CompositeFileSystem copyDirectory() {
-    return createNewDirectory(children());
+    return new Directory(name(), children(), parent());
   }
 }

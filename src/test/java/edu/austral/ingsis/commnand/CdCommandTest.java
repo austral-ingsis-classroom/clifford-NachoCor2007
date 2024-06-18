@@ -50,7 +50,7 @@ public class CdCommandTest {
     Result<FileManager> result = fileManager1.run("cd test2");
 
     assertEquals(result.resultType().getResultType(), "Failure");
-    assertEquals(result.message(), "Directory not found");
+    assertEquals(result.message(), "test2 not found");
     assertEquals(result.value().cursor().name(), "/");
   }
 

@@ -18,6 +18,6 @@ public record File(String name, FileSystem parent) implements FileSystem {
 
   @Override
   public FileSystem copy() {
-    return new File(name(), parent().copy());
+    return new File(name(), parent());
   }
 }
