@@ -49,7 +49,7 @@ public class MkdirCommand implements Command {
   private Result<FileManager> getFileManagerResult(CompositeFileSystem currentDirectory, String name) {
     Result<FileSystem> filledNewDirectory = getFileSystemResult(currentDirectory, name);
 
-    if (filledNewDirectory.resultType().getResultType().equals("Failure")) {
+    if (filledNewDirectory.isEmpty()) {
       return new Result<>(new Failure(), fileManager.copy(), filledNewDirectory.message());
     }
 
