@@ -5,7 +5,6 @@ import edu.austral.ingsis.clifford.communication.Result;
 import edu.austral.ingsis.clifford.communication.commtype.Failure;
 import edu.austral.ingsis.clifford.communication.commtype.Success;
 import edu.austral.ingsis.clifford.filemanager.FileManager;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +58,8 @@ public class CommandFactory {
         return new Result<>(new Failure(), null, "Invalid command");
       }
 
-      return new Result<>(new Success(), new MkdirCommand(fileManager, options), "Mkdir command created");
+      return new Result<>(
+          new Success(), new MkdirCommand(fileManager, options), "Mkdir command created");
     } catch (Exception e) {
       return new Result<>(new Failure(), null, "Something went wrong while parsing the command");
     }
@@ -73,7 +73,8 @@ public class CommandFactory {
         return new Result<>(new Failure(), null, "Invalid command");
       }
 
-      return new Result<>(new Success(), new TouchCommand(fileManager, options), "Touch command created");
+      return new Result<>(
+          new Success(), new TouchCommand(fileManager, options), "Touch command created");
     } catch (Exception e) {
       return new Result<>(new Failure(), null, "Something went wrong while parsing the command");
     }

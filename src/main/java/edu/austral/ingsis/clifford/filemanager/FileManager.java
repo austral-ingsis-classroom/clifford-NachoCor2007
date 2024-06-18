@@ -5,9 +5,7 @@ import edu.austral.ingsis.clifford.command.CommandFactory;
 import edu.austral.ingsis.clifford.communication.Result;
 import edu.austral.ingsis.clifford.filesystem.FileSystem;
 import edu.austral.ingsis.clifford.filesystem.composite.Directory;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public record FileManager(FileSystem cursor, CommandFactory commandFactory) {
   public FileManager(CommandFactory commandFactory) {

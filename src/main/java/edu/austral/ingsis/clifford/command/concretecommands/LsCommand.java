@@ -6,7 +6,6 @@ import edu.austral.ingsis.clifford.communication.commtype.Success;
 import edu.austral.ingsis.clifford.filemanager.FileManager;
 import edu.austral.ingsis.clifford.filesystem.FileSystem;
 import edu.austral.ingsis.clifford.filesystem.composite.CompositeFileSystem;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -45,9 +44,7 @@ public class LsCommand implements Command {
     String order = options.get("order");
 
     if (order == null) {
-      return children.stream()
-          .map(FileSystem::name)
-          .collect(Collectors.joining(" "));
+      return children.stream().map(FileSystem::name).collect(Collectors.joining(" "));
     }
 
     return listChildrenInOrder(children, order.equals("asc"));
@@ -57,11 +54,13 @@ public class LsCommand implements Command {
     Stream<FileSystem> childrenStream = children.stream();
 
     if (asc) {
-      return childrenStream.sorted(Comparator.comparing(FileSystem::name))
+      return childrenStream
+          .sorted(Comparator.comparing(FileSystem::name))
           .map(FileSystem::name)
           .collect(Collectors.joining(" "));
     } else {
-      return childrenStream.sorted(Comparator.comparing(FileSystem::name).reversed())
+      return childrenStream
+          .sorted(Comparator.comparing(FileSystem::name).reversed())
           .map(FileSystem::name)
           .collect(Collectors.joining(" "));
     }

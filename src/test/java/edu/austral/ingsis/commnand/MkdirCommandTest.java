@@ -7,8 +7,8 @@ import edu.austral.ingsis.clifford.command.Parser;
 import edu.austral.ingsis.clifford.communication.Result;
 import edu.austral.ingsis.clifford.filemanager.FileManager;
 import edu.austral.ingsis.clifford.filesystem.FileSystem;
-import org.junit.jupiter.api.Test;
 import java.util.List;
+import org.junit.jupiter.api.Test;
 
 public class MkdirCommandTest {
   private final Parser parser = new Parser();

@@ -29,7 +29,8 @@ public class RmCommand implements Command {
       return new Result<>(modFileSystem.resultType(), fileManager.copy(), modFileSystem.message());
     }
 
-    FileManager newFileManager = new FileManager(modFileSystem.value(), fileManager.commandFactory());
+    FileManager newFileManager =
+        new FileManager(modFileSystem.value(), fileManager.commandFactory());
     return new Result<>(modFileSystem.resultType(), newFileManager, modFileSystem.message());
   }
 
@@ -41,7 +42,8 @@ public class RmCommand implements Command {
     return removeFile(currentDirectory, name, recursive);
   }
 
-  private Result<FileSystem> removeFile(CompositeFileSystem currentDirectory, String name, boolean recursive) {
+  private Result<FileSystem> removeFile(
+      CompositeFileSystem currentDirectory, String name, boolean recursive) {
     Result<FileSystem> fileToRemove = currentDirectory.getChild(name);
 
     if (fileToRemove.isEmpty()) {
@@ -49,7 +51,8 @@ public class RmCommand implements Command {
     }
 
     if (fileToRemove.value().isDirectory() && !recursive) {
-      return new Result<>(new Failure(), currentDirectory, "Cannot remove '" + name + "', is a directory");
+      return new Result<>(
+          new Failure(), currentDirectory, "Cannot remove '" + name + "', is a directory");
     }
 
     return currentDirectory.remove(fileToRemove.value());

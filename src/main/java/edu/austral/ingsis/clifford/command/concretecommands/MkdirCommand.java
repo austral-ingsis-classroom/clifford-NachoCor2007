@@ -8,7 +8,6 @@ import edu.austral.ingsis.clifford.filemanager.FileManager;
 import edu.austral.ingsis.clifford.filesystem.FileSystem;
 import edu.austral.ingsis.clifford.filesystem.composite.CompositeFileSystem;
 import edu.austral.ingsis.clifford.filesystem.composite.Directory;
-
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -38,7 +37,8 @@ public class MkdirCommand implements Command {
     return currentDirectory.getDirectory().value();
   }
 
-  private Result<FileManager> createAndAddDirectory(CompositeFileSystem currentDirectory, String name) {
+  private Result<FileManager> createAndAddDirectory(
+      CompositeFileSystem currentDirectory, String name) {
     boolean validName = validateDirName(name);
     if (validName) {
       return getFileManagerResult(currentDirectory, name);
@@ -47,19 +47,22 @@ public class MkdirCommand implements Command {
     }
   }
 
-  private Result<FileManager> getFileManagerResult(CompositeFileSystem currentDirectory, String name) {
+  private Result<FileManager> getFileManagerResult(
+      CompositeFileSystem currentDirectory, String name) {
     Result<FileSystem> filledNewDirectory = getFileSystemResult(currentDirectory, name);
 
     if (filledNewDirectory.isEmpty()) {
       return new Result<>(new Failure(), fileManager.copy(), filledNewDirectory.message());
     }
 
-    FileManager newFileManager = new FileManager(filledNewDirectory.value(), fileManager.commandFactory());
+    FileManager newFileManager =
+        new FileManager(filledNewDirectory.value(), fileManager.commandFactory());
 
     return new Result<>(new Success(), newFileManager, "'" + name + "' directory created");
   }
 
-  private Result<FileSystem> getFileSystemResult(CompositeFileSystem currentDirectory, String name) {
+  private Result<FileSystem> getFileSystemResult(
+      CompositeFileSystem currentDirectory, String name) {
     CompositeFileSystem newDirectory = new Directory(name, new ArrayList<>(), currentDirectory);
 
     boolean alreadyExists = dirAlreadyExists(currentDirectory, name);
@@ -72,8 +75,7 @@ public class MkdirCommand implements Command {
   }
 
   private boolean dirAlreadyExists(CompositeFileSystem currentDirectory, String name) {
-    return currentDirectory.children()
-        .stream()
+    return currentDirectory.children().stream()
         .anyMatch(fileSystem -> fileSystem.name().equals(name) && fileSystem.isDirectory());
   }
 
