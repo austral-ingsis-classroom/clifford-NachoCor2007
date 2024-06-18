@@ -51,10 +51,8 @@ public class CommandFactory {
   }
 
   private Result<Command> createMkdirCommand(FileManager fileManager, List<String> params) {
-    Map<String, String> options = new HashMap<>();
-
     try {
-      options.put("name", params.removeFirst());
+      Map<String, String> options = parser.parseMkdirOptions(params);
 
       if (!params.isEmpty()) {
         return new Result<>(new Failure(), null, "Invalid command");
@@ -67,10 +65,8 @@ public class CommandFactory {
   }
 
   private Result<Command> createTouchCommand(FileManager fileManager, List<String> params) {
-    Map<String, String> options = new HashMap<>();
-
     try {
-      options.put("name", params.removeFirst());
+      Map<String, String> options = parser.parseTouchOptions(params);
 
       if (!params.isEmpty()) {
         return new Result<>(new Failure(), null, "Invalid command");
@@ -83,9 +79,9 @@ public class CommandFactory {
   }
 
   private Result<Command> createLsCommand(FileManager fileManager, List<String> params) {
-    Map<String, String> options = new HashMap<>();
-
     try {
+      Map<String, String> options = parser.parseLsOptions(params);
+
       return new Result<>(new Success(), new LsCommand(fileManager, options), "Ls command created");
     } catch (Exception e) {
       return new Result<>(new Failure(), null, "Something went wrong while parsing the command");

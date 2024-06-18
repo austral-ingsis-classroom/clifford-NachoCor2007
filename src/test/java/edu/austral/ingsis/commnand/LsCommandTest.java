@@ -40,4 +40,20 @@ public class LsCommandTest {
     assertEquals(runResult.resultType().getResultType(), "Success");
     assertEquals(runResult.message(), "horace horace2 steve");
   }
+
+  @Test
+  public void lsCommandInOrderTest() {
+    FileManager afterMkdirCommand = fileManager.run("mkdir a").value();
+    FileManager afterMkdirCommand2 = afterMkdirCommand.run("mkdir c").value();
+    FileManager afterMkdirCommand3 = afterMkdirCommand2.run("mkdir b").value();
+    Result<FileManager> ascendingRunResult = afterMkdirCommand3.run("ls --ord=asc");
+
+    assertEquals(ascendingRunResult.resultType().getResultType(), "Success");
+    assertEquals(ascendingRunResult.message(), "a b c");
+
+    Result<FileManager> descendingRunResult = afterMkdirCommand3.run("ls --ord=desc");
+
+    assertEquals(descendingRunResult.resultType().getResultType(), "Success");
+    assertEquals(descendingRunResult.message(), "c b a");
+  }
 }

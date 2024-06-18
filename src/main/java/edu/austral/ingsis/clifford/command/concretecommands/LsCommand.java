@@ -7,9 +7,11 @@ import edu.austral.ingsis.clifford.filemanager.FileManager;
 import edu.austral.ingsis.clifford.filesystem.FileSystem;
 import edu.austral.ingsis.clifford.filesystem.composite.CompositeFileSystem;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class LsCommand implements Command {
   private final FileManager fileManager;
@@ -40,8 +42,28 @@ public class LsCommand implements Command {
   }
 
   private String listChildren(List<FileSystem> children) {
-    return children.stream()
-        .map(FileSystem::name)
-        .collect(Collectors.joining(" "));
+    String order = options.get("order");
+
+    if (order == null) {
+      return children.stream()
+          .map(FileSystem::name)
+          .collect(Collectors.joining(" "));
+    }
+
+    return listChildrenInOrder(children, order.equals("asc"));
+  }
+
+  private String listChildrenInOrder(List<FileSystem> children, boolean asc) {
+    Stream<FileSystem> childrenStream = children.stream();
+
+    if (asc) {
+      return childrenStream.sorted(Comparator.comparing(FileSystem::name))
+          .map(FileSystem::name)
+          .collect(Collectors.joining(" "));
+    } else {
+      return childrenStream.sorted(Comparator.comparing(FileSystem::name).reversed())
+          .map(FileSystem::name)
+          .collect(Collectors.joining(" "));
+    }
   }
 }
