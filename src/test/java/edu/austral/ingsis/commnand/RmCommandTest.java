@@ -38,7 +38,7 @@ public class RmCommandTest {
     FileManager fileManager1 = fileManager.run("mkdir horace").value();
     Result<FileManager> fileManager2 = fileManager1.run("rm horace");
 
-    assertEquals("Cannot remove 'horace', is a directory", fileManager2.message());
+    assertEquals("cannot remove 'horace', is a directory", fileManager2.message());
     assertEquals("Failure", fileManager2.resultType().getResultType());
     assertEquals("horace", fileManager2.value().run("ls").message());
   }
