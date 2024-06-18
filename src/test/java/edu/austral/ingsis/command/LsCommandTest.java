@@ -1,4 +1,4 @@
-package edu.austral.ingsis.commnand;
+package edu.austral.ingsis.command;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
