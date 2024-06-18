@@ -12,6 +12,7 @@ public record Directory(String name, List<FileSystem> children, FileSystem paren
 
   @Override
   public Result<FileSystem> add(FileSystem toAdd) {
+    children.remove(toAdd); // Remove if it already exists (to avoid duplicates)
     children.add(toAdd);
     return new Result<>(new Success(), this, "'" + toAdd.name() + "' directory created");
   }

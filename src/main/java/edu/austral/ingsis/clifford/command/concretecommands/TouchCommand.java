@@ -67,17 +67,6 @@ public class TouchCommand implements Command {
       CompositeFileSystem currentDirectory, String name) {
     FileSystem newFile = new File(name, currentDirectory);
 
-    boolean alreadyExists = fileAlreadyExists(currentDirectory, name);
-
-    if (alreadyExists) {
-      return new Result<>(new Failure(), null, "'" + name + "' file already exists");
-    }
-
     return currentDirectory.add(newFile);
-  }
-
-  private boolean fileAlreadyExists(CompositeFileSystem currentDirectory, String name) {
-    return currentDirectory.children().stream()
-        .anyMatch(file -> file.name().equals(name) && !file.isDirectory());
   }
 }
