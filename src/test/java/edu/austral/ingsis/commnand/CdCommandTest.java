@@ -19,7 +19,7 @@ public class CdCommandTest {
     Result<FileManager> result = fileManager1.run("cd test");
 
     assertEquals(result.resultType().getResultType(), "Success");
-    assertEquals(result.message(), "Moved to directory: test");
+    assertEquals(result.message(), "Moved to directory: 'test'");
     assertEquals(result.value().cursor().name(), "test");
   }
 
@@ -31,7 +31,7 @@ public class CdCommandTest {
     FileManager fileManager4 = fileManager3.run("cd test2").value();
     Result<FileManager> result = fileManager4.run("cd /");
 
-    assertEquals(result.message(), "Moved to directory: /");
+    assertEquals(result.message(), "Moved to directory: '/'");
     assertEquals(result.resultType().getResultType(), "Success");
     assertEquals(result.value().cursor().name(), "/");
   }
@@ -45,7 +45,7 @@ public class CdCommandTest {
     Result<FileManager> result = fileManager4.run("cd ..");
 
     assertEquals(result.resultType().getResultType(), "Success");
-    assertEquals(result.message(), "Moved to directory: test");
+    assertEquals(result.message(), "Moved to directory: 'test'");
     assertEquals(result.value().cursor().name(), "test");
 
     FileManager fileManager5 = result.value();
@@ -53,7 +53,7 @@ public class CdCommandTest {
     Result<FileManager> result2 = fileManager6.run("cd test/test2");
 
     assertEquals(result2.resultType().getResultType(), "Success");
-    assertEquals(result2.message(), "Moved to directory: test2");
+    assertEquals(result2.message(), "Moved to directory: 'test2'");
     assertEquals(result2.value().cursor().name(), "test2");
   }
 
@@ -63,7 +63,7 @@ public class CdCommandTest {
     Result<FileManager> result = fileManager1.run("cd test2");
 
     assertEquals(result.resultType().getResultType(), "Failure");
-    assertEquals(result.message(), "test2 not found");
+    assertEquals(result.message(), "'test2' not found");
     assertEquals(result.value().cursor().name(), "/");
   }
 

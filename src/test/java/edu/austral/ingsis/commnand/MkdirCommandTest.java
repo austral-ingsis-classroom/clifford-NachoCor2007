@@ -24,7 +24,7 @@ public class MkdirCommandTest {
     List<FileSystem> children = currentDirectory.getDirectory().value().children();
 
     assertEquals(runResult.resultType().getResultType(), "Success");
-    assertEquals(runResult.message(), "horace directory created");
+    assertEquals(runResult.message(), "'horace' directory created");
     assertEquals(children.size(), 1);
     assertEquals(children.getFirst().getDirectory().value().name(), "horace");
   }
@@ -61,6 +61,6 @@ public class MkdirCommandTest {
     Result<FileManager> runResult = afterMkdirCommand.run("mkdir horace");
 
     assertEquals(runResult.resultType().getResultType(), "Failure");
-    assertEquals(runResult.message(), "horace directory already exists");
+    assertEquals(runResult.message(), "'horace' directory already exists");
   }
 }

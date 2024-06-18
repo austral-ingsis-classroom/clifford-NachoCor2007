@@ -20,7 +20,7 @@ public class TouchCommandTest {
     Result<FileManager> result = fileManager.run("touch file.mp4");
 
     assertEquals(result.resultType().getResultType(), "Success");
-    assertEquals(result.message(), "file.mp4 file created");
+    assertEquals(result.message(), "'file.mp4' file created");
 
     FileManager afterTouchCommand = result.value();
     FileSystem currentDirectory = afterTouchCommand.cursor();
@@ -64,7 +64,7 @@ public class TouchCommandTest {
     Result<FileManager> result = afterTouchCommand.run("touch file.mp4");
 
     assertEquals(result.resultType().getResultType(), "Failure");
-    assertEquals(result.message(), "file.mp4 file already exists");
+    assertEquals(result.message(), "'file.mp4' file already exists");
 
     FileSystem currentDirectory = afterTouchCommand.cursor();
     List<FileSystem> children = currentDirectory.getDirectory().value().children();

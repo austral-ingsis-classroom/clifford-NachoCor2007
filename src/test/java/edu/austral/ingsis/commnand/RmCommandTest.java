@@ -18,7 +18,7 @@ public class RmCommandTest {
     FileManager fileManager1 = fileManager.run("touch horace").value();
     Result<FileManager> fileManager2 = fileManager1.run("rm horace");
 
-    assertEquals("horace removed", fileManager2.message());
+    assertEquals("'horace' removed", fileManager2.message());
     assertEquals("Success", fileManager2.resultType().getResultType());
     assertEquals("", fileManager2.value().run("ls").message());
   }
@@ -28,7 +28,7 @@ public class RmCommandTest {
     FileManager fileManager1 = fileManager.run("mkdir horace").value();
     Result<FileManager> fileManager2 = fileManager1.run("rm --recursive horace");
 
-    assertEquals("horace removed", fileManager2.message());
+    assertEquals("'horace' removed", fileManager2.message());
     assertEquals("Success", fileManager2.resultType().getResultType());
     assertEquals("", fileManager2.value().run("ls").message());
   }

@@ -8,36 +8,12 @@ import edu.austral.ingsis.clifford.filesystem.FileSystem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Directory implements CompositeFileSystem {
-  private final String name;
-  private final List<FileSystem> children;
-  private final FileSystem parent;
-
-  public Directory(String name, List<FileSystem> children, FileSystem parent) {
-    this.name = name;
-    this.children = children;
-    this.parent = parent;
-  }
-
-  @Override
-  public String name() {
-    return name;
-  }
-
-  @Override
-  public List<FileSystem> children() {
-    return children;
-  }
-
-  @Override
-  public FileSystem parent() {
-    return parent;
-  }
+public record Directory(String name, List<FileSystem> children, FileSystem parent) implements CompositeFileSystem {
 
   @Override
   public Result<FileSystem> add(FileSystem toAdd) {
     children.add(toAdd);
-    return new Result<>(new Success(), this, toAdd.name() + " directory created");
+    return new Result<>(new Success(), this, "'" + toAdd.name() + "' directory created");
   }
 
   @Override
@@ -45,7 +21,7 @@ public class Directory implements CompositeFileSystem {
     boolean removeStatus = children.remove(toRemove);
 
     ResultType resultType = removeStatus ? new Success() : new Failure();
-    String message = removeStatus ? toRemove.name() + " removed" : toRemove.name() + " not found";
+    String message = removeStatus ? "'" + toRemove.name() + "' removed" : "'" + toRemove.name() + "' not found";
     return new Result<>(resultType, this, message);
   }
 
@@ -53,11 +29,11 @@ public class Directory implements CompositeFileSystem {
   public Result<FileSystem> getChild(String name) {
     for (FileSystem child : children) {
       if (child.name().equals(name)) {
-        return new Result<>(new Success(), child, "Found " + name);
+        return new Result<>(new Success(), child, "Found '" + name + "'");
       }
     }
 
-    return new Result<>(new Failure(), null, name + " not found");
+    return new Result<>(new Failure(), null, "'" + name + "' not found");
   }
 
   @Override

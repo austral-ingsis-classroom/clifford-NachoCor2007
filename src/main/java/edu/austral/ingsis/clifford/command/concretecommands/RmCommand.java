@@ -6,7 +6,6 @@ import edu.austral.ingsis.clifford.communication.commtype.Failure;
 import edu.austral.ingsis.clifford.filemanager.FileManager;
 import edu.austral.ingsis.clifford.filesystem.FileSystem;
 import edu.austral.ingsis.clifford.filesystem.composite.CompositeFileSystem;
-
 import java.util.Map;
 
 public class RmCommand implements Command {

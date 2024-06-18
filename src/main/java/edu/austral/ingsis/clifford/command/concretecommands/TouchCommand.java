@@ -59,7 +59,7 @@ public class TouchCommand implements Command {
 
     FileManager newFileManager = new FileManager(filledNewFile.value(), fileManager.commandFactory());
 
-    return new Result<>(new Success(), newFileManager, name + " file created");
+    return new Result<>(new Success(), newFileManager, "'" + name + "' file created");
   }
 
   private Result<FileSystem> getFileSystemResult(CompositeFileSystem currentDirectory, String name) {
@@ -68,7 +68,7 @@ public class TouchCommand implements Command {
     boolean alreadyExists = fileAlreadyExists(currentDirectory, name);
 
     if (alreadyExists) {
-      return new Result<>(new Failure(), null, name + " file already exists");
+      return new Result<>(new Failure(), null, "'" + name + "' file already exists");
     }
 
     return currentDirectory.add(newFile);
