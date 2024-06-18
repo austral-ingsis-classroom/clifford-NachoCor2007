@@ -22,11 +22,16 @@ public class PwdCommand implements Command {
 
   private String writePath() {
     FileSystem cursor = fileManager.cursor();
-    StringBuilder path = new StringBuilder(cursor.name());
+
+    if (cursor.parent() == null) {
+      return "/";
+    }
+
+    StringBuilder path = new StringBuilder();
 
     while (cursor.parent() != null) {
+      path.insert(0, "/" + cursor.name());
       cursor = cursor.parent();
-      path.insert(0, cursor.name() + "/");
     }
 
     return path.toString();
