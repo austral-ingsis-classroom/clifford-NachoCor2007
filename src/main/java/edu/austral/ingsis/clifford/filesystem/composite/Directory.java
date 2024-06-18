@@ -39,6 +39,17 @@ public record Directory(String name, List<FileSystem> children, FileSystem paren
     return copyChildren();
   }
 
+  @Override
+  public Result<FileSystem> getChild(String name) {
+    for (FileSystem child : children) {
+      if (child.name().equals(name)) {
+        return new Result<>(new Success(), child, "Found " + name);
+      }
+    }
+
+    return new Result<>(new Failure(), copy(), name + " not found");
+  }
+
   private List<FileSystem> copyChildren() {
     List<FileSystem> copiedChildren = new ArrayList<>();
 

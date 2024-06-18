@@ -8,4 +8,5 @@ public interface CompositeFileSystem extends FileSystem {
   Result<FileSystem> add(FileSystem toAdd);
   Result<FileSystem> remove(FileSystem toRemove);
   List<FileSystem> children();
+  Result<FileSystem> getChild(String name);
 }
