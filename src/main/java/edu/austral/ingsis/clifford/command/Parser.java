@@ -23,8 +23,14 @@ public class Parser {
   }
 
   public Map<String, String> parseLsOptions(List<String> params) {
-    HashMap<String, String> options = new HashMap<>();
+    Map<String, String> options = new HashMap<>();
     orderEntry(params, options);
+    return options;
+  }
+
+  public Map<String, String> parseCdOptions(List<String> params) {
+    Map<String, String> options = new HashMap<>();
+    pathEntry(params, options);
     return options;
   }
 
@@ -57,5 +63,13 @@ public class Parser {
     }
 
     options.put("order", order);
+  }
+
+  private void pathEntry(List<String> params, Map<String, String> options) {
+    if (params.isEmpty()) {
+      return;
+    }
+    String path = params.removeFirst();
+    options.put("path", path);
   }
 }

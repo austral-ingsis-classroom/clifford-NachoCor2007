@@ -1,8 +1,6 @@
 package edu.austral.ingsis.clifford.command;
 
-import edu.austral.ingsis.clifford.command.concretecommands.LsCommand;
-import edu.austral.ingsis.clifford.command.concretecommands.MkdirCommand;
-import edu.austral.ingsis.clifford.command.concretecommands.TouchCommand;
+import edu.austral.ingsis.clifford.command.concretecommands.*;
 import edu.austral.ingsis.clifford.communication.Result;
 import edu.austral.ingsis.clifford.communication.commtype.Failure;
 import edu.austral.ingsis.clifford.communication.commtype.Success;
@@ -43,6 +41,8 @@ public class CommandFactory {
         case "mkdir" -> createMkdirCommand(fileManager, params);
         case "touch" -> createTouchCommand(fileManager, params);
         case "ls" -> createLsCommand(fileManager, params);
+        case "pwd" -> createPwdCommand(fileManager, params);
+        case "cd" -> createCdCommand(fileManager, params);
         default -> new Result<>(new Failure(), null, "Command not found");
       };
     } catch (Exception e) {
@@ -83,6 +83,23 @@ public class CommandFactory {
       Map<String, String> options = parser.parseLsOptions(params);
 
       return new Result<>(new Success(), new LsCommand(fileManager, options), "Ls command created");
+    } catch (Exception e) {
+      return new Result<>(new Failure(), null, "Something went wrong while parsing the command");
+    }
+  }
+
+  private Result<Command> createPwdCommand(FileManager fileManager, List<String> params) {
+    try {
+      return new Result<>(new Success(), new PwdCommand(fileManager), "Pwd command created");
+    } catch (Exception e) {
+      return new Result<>(new Failure(), null, "Something went wrong while parsing the command");
+    }
+  }
+
+  private Result<Command> createCdCommand(FileManager fileManager, List<String> params) {
+    try {
+      Map<String, String> options = parser.parseCdOptions(params);
+      return new Result<>(new Success(), new CdCommand(fileManager, options), "Cd command created");
     } catch (Exception e) {
       return new Result<>(new Failure(), null, "Something went wrong while parsing the command");
     }
