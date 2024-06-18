@@ -6,7 +6,6 @@ import edu.austral.ingsis.clifford.communication.commtype.Failure;
 import edu.austral.ingsis.clifford.communication.commtype.Success;
 import edu.austral.ingsis.clifford.filemanager.FileManager;
 import edu.austral.ingsis.clifford.filesystem.FileSystem;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,18 +53,39 @@ public class CdCommand implements Command {
   }
 
   private Result<FileSystem> iterateThroughPath(FileSystem cursor, List<String> path) {
+    FileSystem temp = cursor;
+
     for (String nextDir : path) {
       if (nextDir.equals(".")) {
         continue;
       }
       if (nextDir.equals("..")) {
-        cursor = cursor.parent();
+        if (temp.name().equals("/")) {
+          return new Result<>(new Success(), cursor, "Moved to directory: /");
+        }
+        temp = temp.parent();
         continue;
       }
 
-      FileSystem newCursor = cursor.getChild(nextDir);
+      Result<FileSystem> newCursor = temp.getDirectory().value().getChild(nextDir);
+
+      if (newCursor.isEmpty()) {
+        return new Result<>(newCursor.resultType(), temp, newCursor.message());
+      }
+
+      FileSystem child = newCursor.value();
+
+      if (!child.isDirectory()) {
+        return new Result<>(new Failure(), cursor, "Path is a file");
+      }
+
+      if (!child.name().equals(nextDir)) {
+        return new Result<>(new Failure(), cursor, "Directory not found");
+      }
+
+      temp = child;
     }
 
-    return new Result<>(new Success(), cursor, "Path found");
+    return new Result<>(new Success(), temp, "Moved to directory: " + temp.name());
   }
 }
