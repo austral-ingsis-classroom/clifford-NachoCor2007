@@ -27,7 +27,8 @@ public record FileManager(FileSystem cursor, CommandFactory commandFactory) {
     }
 
     Command commandToExecute = commandResult.value();
-    return commandToExecute.execute();
+    Result<FileManager> newFileManager = commandToExecute.execute();
+    return newFileManager;
   }
 
   private Result<Command> getCommand(String command) {

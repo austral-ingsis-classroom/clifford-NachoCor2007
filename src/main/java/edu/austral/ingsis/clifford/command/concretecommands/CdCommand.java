@@ -88,7 +88,7 @@ public class CdCommand implements Command {
       Result<FileSystem> newCursor = temp.getDirectory().value().getChild(nextDir);
 
       if (newCursor.isEmpty()) {
-        return new Result<>(newCursor.resultType(), temp, newCursor.message());
+        return new Result<>(newCursor.resultType(), temp, "'" + nextDir + "' directory does not exist");
       }
 
       FileSystem child = newCursor.value();

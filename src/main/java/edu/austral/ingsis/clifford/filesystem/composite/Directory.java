@@ -5,7 +5,6 @@ import edu.austral.ingsis.clifford.communication.commtype.Failure;
 import edu.austral.ingsis.clifford.communication.commtype.ResultType;
 import edu.austral.ingsis.clifford.communication.commtype.Success;
 import edu.austral.ingsis.clifford.filesystem.FileSystem;
-import java.util.ArrayList;
 import java.util.List;
 
 public record Directory(String name, List<FileSystem> children, FileSystem parent) implements CompositeFileSystem {
@@ -21,7 +20,7 @@ public record Directory(String name, List<FileSystem> children, FileSystem paren
     boolean removeStatus = children.remove(toRemove);
 
     ResultType resultType = removeStatus ? new Success() : new Failure();
-    String message = removeStatus ? "'" + toRemove.name() + "' removed" : "'" + toRemove.name() + "' not found";
+    String message = removeStatus ? "'" + toRemove.name() + "' removed" : "'" + toRemove.name() + "' does bot exist";
     return new Result<>(resultType, this, message);
   }
 
@@ -49,5 +48,15 @@ public record Directory(String name, List<FileSystem> children, FileSystem paren
   @Override
   public FileSystem copy() {
     return new Directory(name(), children(), parent());
+  }
+
+  @Override
+  public String toString() {
+    return "Directory{" +
+        "name='" + name + '\'' +
+        ", children=" + children.stream()
+        .map(FileSystem::name)
+        .toList() +
+        '}';
   }
 }

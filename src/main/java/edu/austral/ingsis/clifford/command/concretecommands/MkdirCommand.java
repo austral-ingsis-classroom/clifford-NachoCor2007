@@ -9,6 +9,7 @@ import edu.austral.ingsis.clifford.filesystem.FileSystem;
 import edu.austral.ingsis.clifford.filesystem.composite.CompositeFileSystem;
 import edu.austral.ingsis.clifford.filesystem.composite.Directory;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class MkdirCommand implements Command {
@@ -59,7 +60,7 @@ public class MkdirCommand implements Command {
   }
 
   private Result<FileSystem> getFileSystemResult(CompositeFileSystem currentDirectory, String name) {
-    CompositeFileSystem newDirectory = new Directory(name, currentDirectory.children(), currentDirectory);
+    CompositeFileSystem newDirectory = new Directory(name, new ArrayList<>(), currentDirectory);
 
     boolean alreadyExists = dirAlreadyExists(currentDirectory, name);
 

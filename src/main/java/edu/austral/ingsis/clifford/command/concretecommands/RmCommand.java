@@ -49,7 +49,7 @@ public class RmCommand implements Command {
     }
 
     if (fileToRemove.value().isDirectory() && !recursive) {
-      return new Result<>(new Failure(), currentDirectory, "cannot remove '" + name + "', is a directory");
+      return new Result<>(new Failure(), currentDirectory, "Cannot remove '" + name + "', is a directory");
     }
 
     return currentDirectory.remove(fileToRemove.value());
