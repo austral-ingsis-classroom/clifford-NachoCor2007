@@ -43,6 +43,7 @@ public class CommandFactory {
         case "ls" -> createLsCommand(fileManager, params);
         case "pwd" -> createPwdCommand(fileManager, params);
         case "cd" -> createCdCommand(fileManager, params);
+        case "rm" -> createRmCommand(fileManager, params);
         default -> new Result<>(new Failure(), null, "Command not found");
       };
     } catch (Exception e) {
@@ -100,6 +101,15 @@ public class CommandFactory {
     try {
       Map<String, String> options = parser.parseCdOptions(params);
       return new Result<>(new Success(), new CdCommand(fileManager, options), "Cd command created");
+    } catch (Exception e) {
+      return new Result<>(new Failure(), null, "Something went wrong while parsing the command");
+    }
+  }
+
+  private Result<Command> createRmCommand(FileManager fileManager, List<String> params) {
+    try {
+      Map<String, String> options = parser.parseRmOptions(params);
+      return new Result<>(new Success(), new RmCommand(fileManager, options), "Rm command created");
     } catch (Exception e) {
       return new Result<>(new Failure(), null, "Something went wrong while parsing the command");
     }

@@ -2,6 +2,7 @@ package edu.austral.ingsis.clifford.filesystem.composite;
 
 import edu.austral.ingsis.clifford.communication.Result;
 import edu.austral.ingsis.clifford.communication.commtype.Failure;
+import edu.austral.ingsis.clifford.communication.commtype.ResultType;
 import edu.austral.ingsis.clifford.communication.commtype.Success;
 import edu.austral.ingsis.clifford.filesystem.FileSystem;
 import java.util.ArrayList;
@@ -9,8 +10,8 @@ import java.util.List;
 
 public class Directory implements CompositeFileSystem {
   private final String name;
-  private List<FileSystem> children;
-  private FileSystem parent;
+  private final List<FileSystem> children;
+  private final FileSystem parent;
 
   public Directory(String name, List<FileSystem> children, FileSystem parent) {
     this.name = name;
@@ -41,7 +42,11 @@ public class Directory implements CompositeFileSystem {
 
   @Override
   public Result<FileSystem> remove(FileSystem toRemove) {
-    return null;
+    boolean removeStatus = children.remove(toRemove);
+
+    ResultType resultType = removeStatus ? new Success() : new Failure();
+    String message = removeStatus ? toRemove.name() + " removed" : toRemove.name() + " not found";
+    return new Result<>(resultType, this, message);
   }
 
   @Override

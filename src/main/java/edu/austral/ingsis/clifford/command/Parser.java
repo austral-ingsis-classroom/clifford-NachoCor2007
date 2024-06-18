@@ -34,6 +34,13 @@ public class Parser {
     return options;
   }
 
+  public Map<String, String> parseRmOptions(List<String> params) {
+    Map<String, String> options = new HashMap<>();
+    recursiveEntry(params, options);
+    nameEntry(params, options);
+    return options;
+  }
+
   private void nameEntry(List<String> params, Map<String, String> options) {
     if (params.isEmpty()) {
       return;
@@ -71,5 +78,20 @@ public class Parser {
     }
     String path = params.removeFirst();
     options.put("path", path);
+  }
+
+  private void recursiveEntry(List<String> params, Map<String, String> options) {
+    if (params.isEmpty()) {
+      options.put("recursive", "false");
+      return;
+    }
+
+    if (!params.getFirst().equals("--recursive")) {
+      options.put("recursive", "false");
+      return;
+    }
+
+    String recursive = params.removeFirst();
+    options.put("recursive", recursive.equals("--recursive") ? "true" : "false");
   }
 }
